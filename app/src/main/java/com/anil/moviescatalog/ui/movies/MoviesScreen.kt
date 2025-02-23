@@ -2,14 +2,18 @@ package com.anil.moviescatalog.ui.movies
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,35 +33,51 @@ import com.anil.moviescatalog.ui.theme.MoviesCatalogTheme
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 
-const val ITEM_IMAGE_SIZE = 200
+const val ITEM_IMAGE_HEIGHT = 200
+const val ITEM_IMAGE_WIDTH = 140
 
 @Composable
 fun MoviesScreen(modifier: Modifier = Modifier, vm: MoviesViewModel = viewModel()) {
-    val movies by vm.movieList.collectAsState()
-    movies?.let {
-        MoviesScreenContent(modifier, it.results, vm.name)
-    }
+    val popularMovies by vm.popularMovies.collectAsState()
+    val topRatedMovies by vm.topRatedMovies.collectAsState()
+    val topEarnerMovies by vm.topEarnerMovies.collectAsState()
+    MoviesScreenContent(modifier,
+        popularMovies?.results,
+        topRatedMovies?.results,
+        topEarnerMovies?.results)
 }
 
 @Composable
-fun MoviesScreenContent(modifier: Modifier = Modifier, movies: List<Movie>, name: String) {
+fun MoviesScreenContent(modifier: Modifier = Modifier,
+                        popularMovies: List<Movie>?,
+                        topRatedMovies: List<Movie>?,
+                        topEarnerMovies: List<Movie>?
+) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
             .background(MaterialTheme.colorScheme.secondary)
+            .verticalScroll(rememberScrollState())
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_launcher_foreground),
             contentDescription = null,
-            modifier = Modifier.size(50.dp)
+            modifier = Modifier.size(50.dp).align(Alignment.CenterHorizontally)
         )
         Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color.Red))
-        Text(text = name)
-        movies.let {
-            LazyRow {
-                items(it) { movie ->
-                    MovieItem(movie)
-                }
+        MovieRow(popularMovies, "Popular")
+        MovieRow(topRatedMovies, "Top Rated")
+        MovieRow(topEarnerMovies, "Rating")
+    }
+}
+
+@Composable
+fun MovieRow(movies: List<Movie>?, title: String) {
+    Text(title, style = MaterialTheme.typography.headlineSmall)
+    movies?.let {
+        LazyRow {
+            items(it) { movie ->
+                MovieItem(movie)
             }
         }
     }
@@ -68,9 +88,9 @@ fun MoviesScreenContent(modifier: Modifier = Modifier, movies: List<Movie>, name
 fun MovieItem(movie: Movie) {
     Column {
         GlideImage(
-            model = "https://image.tmdb.org/t/p/w$ITEM_IMAGE_SIZE${movie.poster_path}",
+            model = "https://image.tmdb.org/t/p/w$ITEM_IMAGE_HEIGHT${movie.poster_path}",
             contentDescription = null,
-            modifier = Modifier.size(ITEM_IMAGE_SIZE.dp)
+            modifier = Modifier.height(ITEM_IMAGE_HEIGHT.dp).width((ITEM_IMAGE_WIDTH).dp)
         )
     }
 }
@@ -80,7 +100,7 @@ fun MovieItem(movie: Movie) {
 fun MoviesPreview() {
     MoviesCatalogTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            MoviesScreenContent(movies = listOf(), name = "Moviezx")
+            MoviesScreenContent(popularMovies = listOf(), topRatedMovies = listOf(), topEarnerMovies = listOf())
         }
     }
 }

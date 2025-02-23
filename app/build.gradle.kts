@@ -67,7 +67,9 @@ dependencies {
     implementation(libs.androidx.media3.ui)
     implementation(libs.kotlinx.serialization.json)
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
 
+    // other dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

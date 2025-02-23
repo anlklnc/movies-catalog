@@ -14,6 +14,7 @@ import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -36,8 +37,11 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        val json = Json {
+            ignoreUnknownKeys = true
+        }
         return Retrofit.Builder()
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .build()
@@ -46,6 +50,9 @@ object NetworkModule {
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient().newBuilder()
+            .addInterceptor(
+                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+            )
             .addInterceptor(
                 Interceptor { chain ->
                     val request: Request = chain.request()

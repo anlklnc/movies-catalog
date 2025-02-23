@@ -1,17 +1,29 @@
 package com.anil.moviescatalog.data
 
+import com.anil.moviescatalog.model.Category
 import com.anil.moviescatalog.model.Movie
 import com.anil.moviescatalog.model.Movies
 import com.anil.moviescatalog.network.MoviesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 interface MoviesRepository {
-    suspend fun getMovieList(): Movies
+    suspend fun getMovieList(category: Category): Movies
     suspend fun getMovie(): Movie
 }
 
 class NetworkMoviesRepository(
     private val moviesApi: MoviesApi
 ): MoviesRepository {
-    override suspend fun getMovieList() = moviesApi.getMovieList()
-    override suspend fun getMovie() = moviesApi.getMovie()
+    override suspend fun getMovieList(category: Category) = withContext(Dispatchers.IO) {
+        val sortBy = when (category) {
+            Category.POPULAR -> "popularity.desc"
+            Category.TOP_RATED -> "vote_average.desc"
+            Category.REVENUE -> "revenue.desc"
+        }
+        moviesApi.getMovieList(sortBy)
+    }
+    override suspend fun getMovie() = withContext(Dispatchers.IO) {
+        moviesApi.getMovie()
+    }
 }
