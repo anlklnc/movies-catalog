@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.material3)
 
     implementation(libs.androidx.navigation.compose)
+    implementation (libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
     implementation(libs.retrofit)
     implementation(libs.retrofit2.kotlinx.serialization.converter)

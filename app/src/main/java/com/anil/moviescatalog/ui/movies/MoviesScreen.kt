@@ -1,6 +1,5 @@
 package com.anil.moviescatalog.ui.movies
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,10 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemsIndexed
+import androidx.paging.compose.items
 import com.anil.moviescatalog.BuildConfig
 import com.anil.moviescatalog.R
 import com.anil.moviescatalog.model.Category
@@ -39,25 +38,29 @@ const val ITEM_IMAGE_HEIGHT = 200
 const val ITEM_IMAGE_WIDTH = 134
 
 @Composable
-fun MoviesScreen(modifier: Modifier = Modifier, vm: MoviesViewModel = viewModel()) {
+fun MoviesScreen(
+    onNavigateToDetails: (Movie) -> Unit,
+    vm: MoviesViewModel = hiltViewModel()) {
     val popularMovies = vm.popularMovies.collectAsLazyPagingItems()
     val topRatedMovies = vm.topRatedMovies.collectAsLazyPagingItems()
     val topEarnerMovies = vm.topEarnerMovies.collectAsLazyPagingItems()
-    MoviesScreenContent(modifier,
+    MoviesScreenContent(
+        onNavigateToDetails,
         popularMovies,
         topRatedMovies,
         topEarnerMovies)
 }
 
 @Composable
-fun MoviesScreenContent(modifier: Modifier = Modifier,
+fun MoviesScreenContent(
+                        onClick: (Movie) -> Unit,
                         popularMovies: LazyPagingItems<Movie>,
                         topRatedMovies: LazyPagingItems<Movie>,
                         topEarnerMovies: LazyPagingItems<Movie>
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier
+        modifier = Modifier
             .background(MaterialTheme.colorScheme.secondary)
             .verticalScroll(rememberScrollState())
     ) {
@@ -67,14 +70,14 @@ fun MoviesScreenContent(modifier: Modifier = Modifier,
             modifier = Modifier.size(50.dp).align(Alignment.CenterHorizontally)
         )
         Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color.Red))
-        MovieRow(popularMovies, Category.POPULAR)
-        MovieRow(topRatedMovies, Category.TOP_RATED)
-        MovieRow(topEarnerMovies, Category.REVENUE)
+        MovieRow(popularMovies, Category.POPULAR, onClick)
+        MovieRow(topRatedMovies, Category.TOP_RATED, onClick)
+        MovieRow(topEarnerMovies, Category.REVENUE, onClick)
     }
 }
 
 @Composable
-fun MovieRow(movies: LazyPagingItems<Movie>,category: Category) {
+fun MovieRow(movies: LazyPagingItems<Movie>, category: Category, onClick: (Movie) -> Unit) {
     val title = when (category) {
         Category.POPULAR -> "Popular"
         Category.TOP_RATED -> "Top Rated"
@@ -82,10 +85,10 @@ fun MovieRow(movies: LazyPagingItems<Movie>,category: Category) {
     }
     Text(title, style = MaterialTheme.typography.headlineSmall)
     LazyRow {
-        itemsIndexed(movies) { index, movie ->
+        items(movies) { movie ->
             movie?.let {
                 MovieItem(movie){
-                    Log.i("!!!", "MovieRow: $category + $index")
+                    onClick(movie)
                 }
             }
         }
