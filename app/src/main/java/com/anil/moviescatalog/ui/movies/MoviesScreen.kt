@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -61,6 +62,7 @@ fun MoviesScreenContent(
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
+            .fillMaxSize()
             .background(MaterialTheme.colorScheme.secondary)
             .verticalScroll(rememberScrollState())
     ) {
@@ -83,7 +85,10 @@ fun MovieRow(movies: LazyPagingItems<Movie>, category: Category, onClick: (Movie
         Category.TOP_RATED -> "Top Rated"
         Category.REVENUE -> "Revenue"
     }
-    Text(title, style = MaterialTheme.typography.headlineSmall)
+    Text(title,
+        style = MaterialTheme.typography.headlineSmall,
+        modifier = Modifier.padding(8.dp)
+    )
     LazyRow {
         items(movies) { movie ->
             movie?.let {
