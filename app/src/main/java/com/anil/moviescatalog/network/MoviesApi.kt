@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface MoviesApi {
     @GET("3/discover/movie")
-    suspend fun getMovieList(@Query("sort_by")sortBy: String): Movies
+    suspend fun getMovieList(@Query("sort_by")sortBy: String, @Query("page")page: Int): Movies
 
     @GET("3/genre/movie/list")
     suspend fun getMovie(): Movie

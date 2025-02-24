@@ -21,6 +21,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "API_KEY", "\"eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMzE1YWY4MWVmM2M0MjIzYzc2NTNkZThkZjZlYzQ5MCIsIm5iZiI6MTc0MDEzNDUwNC4xNjksInN1YiI6IjY3Yjg1ODY4NzQzNDIwMGMyODIyN2ZkYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qr5W9_2KZzD7m7TCJTum8UeYNrJ4O1sBrDvr18rb6tY\"")
         buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/\"")
+        buildConfigField("String", "IMAGE_URL", "\"https://image.tmdb.org/t/p/w\"")
     }
 
     buildTypes {
@@ -66,8 +67,10 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer.dash)
     implementation(libs.androidx.media3.ui)
     implementation(libs.kotlinx.serialization.json)
-    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+    implementation(libs.compose)
+    implementation(libs.logging.interceptor)
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.paging.runtime)
 
     // other dependencies
     testImplementation(libs.junit)

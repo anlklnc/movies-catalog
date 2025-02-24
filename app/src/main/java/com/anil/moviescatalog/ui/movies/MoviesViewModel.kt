@@ -2,27 +2,29 @@ package com.anil.moviescatalog.ui.movies
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.anil.moviescatalog.data.MoviesPagingSource
 import com.anil.moviescatalog.data.MoviesRepository
 import com.anil.moviescatalog.model.Category
-import com.anil.moviescatalog.model.Movies
+import com.anil.moviescatalog.model.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+const val PAGE_SIZE = 20
 
 @HiltViewModel
 class MoviesViewModel @Inject constructor(
     private val repository: MoviesRepository
 ): ViewModel() {
 
-    private val _popularMovies = MutableStateFlow<Movies?>(null)
-    val popularMovies: StateFlow<Movies?> = _popularMovies.asStateFlow()
-    private val _topRatedMovies = MutableStateFlow<Movies?>(null)
-    val topRatedMovies: StateFlow<Movies?> = _topRatedMovies.asStateFlow()
-    private val _topEarnerMovies = MutableStateFlow<Movies?>(null)
-    val topEarnerMovies: StateFlow<Movies?> = _topEarnerMovies.asStateFlow()
+    lateinit var popularMovies: Flow<PagingData<Movie>>
+    lateinit var topRatedMovies: Flow<PagingData<Movie>>
+    lateinit var topEarnerMovies: Flow<PagingData<Movie>>
 
     init {
         getMovies()
@@ -30,9 +32,14 @@ class MoviesViewModel @Inject constructor(
 
     private fun getMovies() {
         viewModelScope.launch {
-            _popularMovies.value = repository.getMovieList(Category.POPULAR)
-            _topRatedMovies.value = repository.getMovieList(Category.TOP_RATED)
-            _topEarnerMovies.value = repository.getMovieList(Category.REVENUE)
+            popularMovies = createPagerFlow(Category.POPULAR)
+            topRatedMovies = createPagerFlow(Category.TOP_RATED)
+            topEarnerMovies = createPagerFlow(Category.REVENUE)
         }
     }
+
+    private fun createPagerFlow(category: Category): Flow<PagingData<Movie>> =
+        Pager(PagingConfig(PAGE_SIZE)) {
+            MoviesPagingSource(repository, category)
+        }.flow.cachedIn(viewModelScope)
 }
