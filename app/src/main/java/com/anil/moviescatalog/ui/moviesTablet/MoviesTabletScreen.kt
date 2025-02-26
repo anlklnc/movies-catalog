@@ -16,6 +16,7 @@ fun MoviesTabletScreen(
     onMovieSelected: (Movie) -> Unit,
     onNavigateToStreaming: (Movie) -> Unit
 ) {
+    // Two pane layout for tablet
     Row(modifier = Modifier.fillMaxSize()) {
         MoviesScreen(
             Modifier.weight(1f),
@@ -25,6 +26,7 @@ fun MoviesTabletScreen(
             MovieDetailsScreen(
                 it,
                 Modifier.weight(1f),
+                true,
                 onNavigateToStreaming = { onNavigateToStreaming(it) }
             )
         }

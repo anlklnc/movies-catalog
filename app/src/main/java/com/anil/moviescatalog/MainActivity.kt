@@ -28,7 +28,7 @@ import com.anil.moviescatalog.ui.theme.MoviesCatalogTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.reflect.typeOf
 
-const val TABLET_WIDTH_THRESHOLD = 600
+const val TABLET_DP_THRESHOLD = 840
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val navController = rememberNavController()
                     val configuration = LocalConfiguration.current
-                    val tabletLayout = configuration.screenWidthDp >= TABLET_WIDTH_THRESHOLD
+                    val tabletLayout = configuration.screenWidthDp.coerceAtLeast(configuration.screenHeightDp) >= TABLET_DP_THRESHOLD
                     var selectedMovie by remember { mutableStateOf<Movie?>(null) }
 
                     NavHost(

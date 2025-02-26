@@ -28,6 +28,7 @@ class MoviesViewModel @Inject constructor(
     lateinit var topRatedMovies: Flow<PagingData<Movie>>
     lateinit var topEarnerMovies: Flow<PagingData<Movie>>
 
+    // Event for handling network errors on the ui side
     private val _error = MutableSharedFlow<Exception>()
     val error: SharedFlow<Exception> = _error
 

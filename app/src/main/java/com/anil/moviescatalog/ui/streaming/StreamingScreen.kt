@@ -30,6 +30,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.anil.moviescatalog.model.Movie
 import com.anil.moviescatalog.ui.RedLineSeperator
+import com.anil.moviescatalog.util.conditional
 
 @Composable
 fun StreamingScreen (
@@ -53,6 +54,7 @@ fun StreamingScreen (
         }
 
         onDispose {
+            // revert the screen flags on screen exit
             window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             displaySystemUi(context, true)
         }
@@ -69,14 +71,14 @@ fun StreamingScreen (
             ExoPlayerView(vm.exoPlayer)
             RedLineSeperator()
             Text(
-                text = movie.title,
+                text = movie.title ?: "",
                 color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(16.dp)
             )
             Text(
-                text = movie.overview,
+                text = movie.overview ?: "",
                 color = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(16.dp)
             )
@@ -88,10 +90,12 @@ fun StreamingScreen (
 fun ExoPlayerView(exoPlayer: ExoPlayer?, isLandscape: Boolean = false) {
     val context = LocalContext.current
     LifecycleStartEffect(Unit) {
+        // resume the player on screen is resumed
         if(exoPlayer?.isPlaying == false) {
             exoPlayer.play()
         }
         onStopOrDispose {
+            // stop the player on screen is paused
             if (exoPlayer?.isPlaying == true) {
                 exoPlayer.pause()
             }
@@ -130,13 +134,5 @@ fun displaySystemUi(context: Context, show: Boolean) {
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         }
         (context as? Activity)?.window?.decorView?.systemUiVisibility = visibility
-    }
-}
-
-fun Modifier.conditional(condition : Boolean, modifier : Modifier.() -> Modifier) : Modifier {
-    return if (condition) {
-        then(modifier(Modifier))
-    } else {
-        this
     }
 }

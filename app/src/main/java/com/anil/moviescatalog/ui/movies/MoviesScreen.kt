@@ -61,6 +61,7 @@ fun MoviesScreen(
     LaunchedEffect(Unit) {
         coroutineScope.launch {
             vm.error.collectLatest { exception ->
+                // display toast on network error
                 Toast.makeText(context, "Network error!", Toast.LENGTH_SHORT).show()
             }
         }
