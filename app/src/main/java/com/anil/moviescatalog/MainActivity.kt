@@ -17,6 +17,7 @@ import com.anil.moviescatalog.ui.CustomNavType.MovieNavType
 import com.anil.moviescatalog.ui.Navigation
 import com.anil.moviescatalog.ui.movieDetails.MovieDetailsScreen
 import com.anil.moviescatalog.ui.movies.MoviesScreen
+import com.anil.moviescatalog.ui.streaming.StreamingScreen
 import com.anil.moviescatalog.ui.theme.MoviesCatalogTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.reflect.typeOf
@@ -47,6 +48,17 @@ class MainActivity : ComponentActivity() {
                         ){
                             val args = it.toRoute<Navigation.MovieDetailsRoute>()
                             MovieDetailsScreen(
+                                args.movie,
+                                onNavigateToStreaming = {
+                                    navController.navigate(Navigation.StreamingRoute(args.movie))
+                                }
+                            )
+                        }
+                        composable<Navigation.StreamingRoute>(
+                            typeMap = mapOf(typeOf<Movie>() to MovieNavType)
+                        ){
+                            val args = it.toRoute<Navigation.StreamingRoute>()
+                            StreamingScreen(
                                 args.movie
                             )
                         }

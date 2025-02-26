@@ -37,7 +37,8 @@ const val ITEM_IMAGE_HEIGHT = 400
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun MovieDetailsScreen (
-    movie: Movie
+    movie: Movie,
+    onNavigateToStreaming: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.fillMaxWidth().height(300.dp).background(Color.Black)) {
@@ -80,7 +81,7 @@ fun MovieDetailsScreen (
             text = movie.overview
         )
         Button(
-            onClick = { /*TODO*/ },
+            onClick = onNavigateToStreaming,
             modifier = Modifier.fillMaxWidth().padding(16.dp)
         ) {
             Icon(
@@ -107,7 +108,8 @@ fun MoviesPreview() {
                     vote_average = 5.0,
                     video = true,
                     adult = false
-                )
+                ),
+                onNavigateToStreaming = { }
             )
         }
     }

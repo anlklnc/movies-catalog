@@ -9,4 +9,7 @@ class Navigation {
 
     @Serializable
     data class MovieDetailsRoute(val movie: Movie)
+
+    @Serializable
+    data class StreamingRoute(val movie: Movie)
 }
