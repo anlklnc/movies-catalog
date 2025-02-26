@@ -8,6 +8,9 @@ class Navigation {
     object MoviesRoute
 
     @Serializable
+    object MoviesAndDetailsRoute
+
+    @Serializable
     data class MovieDetailsRoute(val movie: Movie)
 
     @Serializable

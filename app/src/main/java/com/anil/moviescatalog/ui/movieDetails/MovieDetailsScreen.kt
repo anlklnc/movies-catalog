@@ -38,9 +38,10 @@ const val ITEM_IMAGE_HEIGHT = 400
 @Composable
 fun MovieDetailsScreen (
     movie: Movie,
+    modifier: Modifier = Modifier,
     onNavigateToStreaming: () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = modifier) {
         Box(modifier = Modifier.fillMaxWidth().height(300.dp).background(Color.Black)) {
             GlideImage(
                 model = BuildConfig.IMAGE_URL + ITEM_IMAGE_HEIGHT + movie.poster_path,
@@ -71,7 +72,7 @@ fun MovieDetailsScreen (
                 Text(movie.release_date, color = Color.White)
                 Icon(
                     imageVector = Icons.Filled.DateRange,
-                    contentDescription = "Rating Icon",
+                    contentDescription = "Calendar Icon",
                     tint = Color.White,
                     modifier = Modifier.padding(start = 8.dp)
                 )
@@ -86,7 +87,7 @@ fun MovieDetailsScreen (
         ) {
             Icon(
                 imageVector = Icons.Filled.PlayArrow,
-                contentDescription = "Play",
+                contentDescription = "Play Icon",
                 tint = Color.White,
             )
         }

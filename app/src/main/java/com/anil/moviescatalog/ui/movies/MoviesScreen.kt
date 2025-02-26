@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,29 +39,34 @@ const val ITEM_IMAGE_WIDTH = 134
 
 @Composable
 fun MoviesScreen(
+    modifier: Modifier = Modifier,
     onNavigateToDetails: (Movie) -> Unit,
     vm: MoviesViewModel = hiltViewModel()) {
+
     val popularMovies = vm.popularMovies.collectAsLazyPagingItems()
     val topRatedMovies = vm.topRatedMovies.collectAsLazyPagingItems()
     val topEarnerMovies = vm.topEarnerMovies.collectAsLazyPagingItems()
+
     MoviesScreenContent(
         onNavigateToDetails,
         popularMovies,
         topRatedMovies,
-        topEarnerMovies)
+        topEarnerMovies,
+        modifier)
+
 }
 
 @Composable
 fun MoviesScreenContent(
-                        onClick: (Movie) -> Unit,
-                        popularMovies: LazyPagingItems<Movie>,
-                        topRatedMovies: LazyPagingItems<Movie>,
-                        topEarnerMovies: LazyPagingItems<Movie>
+    onClick: (Movie) -> Unit,
+    popularMovies: LazyPagingItems<Movie>,
+    topRatedMovies: LazyPagingItems<Movie>,
+    topEarnerMovies: LazyPagingItems<Movie>,
+    modifier: Modifier
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = modifier
             .background(MaterialTheme.colorScheme.secondary)
             .verticalScroll(rememberScrollState())
     ) {
