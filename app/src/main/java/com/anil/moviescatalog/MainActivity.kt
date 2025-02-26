@@ -19,10 +19,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.anil.moviescatalog.model.Movie
 import com.anil.moviescatalog.ui.CustomNavType.MovieNavType
-import com.anil.moviescatalog.ui.MoviesAndDetailsScreen
 import com.anil.moviescatalog.ui.Navigation
 import com.anil.moviescatalog.ui.movieDetails.MovieDetailsScreen
 import com.anil.moviescatalog.ui.movies.MoviesScreen
+import com.anil.moviescatalog.ui.moviesTablet.MoviesTabletScreen
 import com.anil.moviescatalog.ui.streaming.StreamingScreen
 import com.anil.moviescatalog.ui.theme.MoviesCatalogTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,13 +45,13 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(
                         navController = navController,
-                        startDestination = if(tabletLayout) Navigation.MoviesAndDetailsRoute else Navigation.MoviesRoute,
+                        startDestination = if(tabletLayout) Navigation.MoviesTabletRoute else Navigation.MoviesRoute,
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         if (tabletLayout) {
                             // Tablet Layout
-                            composable<Navigation.MoviesAndDetailsRoute> {
-                                MoviesAndDetailsScreen(
+                            composable<Navigation.MoviesTabletRoute> {
+                                MoviesTabletScreen(
                                     selectedMovie = selectedMovie,
                                     onMovieSelected = { movie ->
                                         selectedMovie = movie

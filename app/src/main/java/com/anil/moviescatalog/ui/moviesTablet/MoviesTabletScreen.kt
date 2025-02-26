@@ -1,4 +1,4 @@
-package com.anil.moviescatalog.ui
+package com.anil.moviescatalog.ui.moviesTablet
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +11,7 @@ import com.anil.moviescatalog.ui.movies.MoviesScreen
 import com.anil.moviescatalog.ui.theme.MoviesCatalogTheme
 
 @Composable
-fun MoviesAndDetailsScreen(
+fun MoviesTabletScreen(
     selectedMovie: Movie?,
     onMovieSelected: (Movie) -> Unit,
     onNavigateToStreaming: (Movie) -> Unit
@@ -33,9 +33,9 @@ fun MoviesAndDetailsScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun MoviesAndDetailsScreenPreview() {
+fun MoviesTabletScreenPreview() {
     MoviesCatalogTheme {
-        MoviesAndDetailsScreen(
+        MoviesTabletScreen(
             selectedMovie = Movie(
                 id = 1,
                 title = "Movie Title",
