@@ -1,5 +1,6 @@
 package com.anil.productlistdemo.di
 
+import android.content.Context
 import com.anil.moviescatalog.BuildConfig
 import com.anil.moviescatalog.data.MoviesRepository
 import com.anil.moviescatalog.data.NetworkMoviesRepository
@@ -8,8 +9,10 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
+import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -48,8 +51,9 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(cache: Cache): OkHttpClient {
         return OkHttpClient().newBuilder()
+            .cache(cache)
             .addInterceptor(
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
             )
@@ -62,5 +66,11 @@ object NetworkModule {
                     chain.proceed(request)
                 }
             ).build()
+    }
+
+    @Provides
+    fun provideCache(@ApplicationContext context: Context): Cache {
+        val cacheSize: Long = 100 * 1024 * 1024 // 100 MB
+        return Cache(context.cacheDir, cacheSize)
     }
 }

@@ -31,6 +31,7 @@ import com.anil.moviescatalog.ui.theme.MoviesCatalogTheme
 import com.anil.moviescatalog.util.NumberUtil
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 const val ITEM_IMAGE_HEIGHT = 400
 
@@ -47,6 +48,7 @@ fun MovieDetailsScreen (
                 model = BuildConfig.IMAGE_URL + ITEM_IMAGE_HEIGHT + movie.poster_path,
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
+                requestBuilderTransform = { it.diskCacheStrategy(DiskCacheStrategy.ALL) },
                 modifier = Modifier.fillMaxSize().align(Alignment.Center)
             )
             Column(modifier = Modifier.align(Alignment.BottomStart).padding(16.dp)) {

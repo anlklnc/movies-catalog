@@ -33,6 +33,8 @@ import com.anil.moviescatalog.model.Movie
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+
 
 const val ITEM_IMAGE_HEIGHT = 200
 const val ITEM_IMAGE_WIDTH = 134
@@ -108,21 +110,14 @@ fun MovieRow(movies: LazyPagingItems<Movie>, category: Category, onClick: (Movie
 @Composable
 fun MovieItem(movie: Movie, onClick: ()->Unit) {
     Column(modifier = Modifier.padding(horizontal = 3.dp).clickable{onClick()}) {
-        GlideImage(
-            model = BuildConfig.IMAGE_URL + ITEM_IMAGE_HEIGHT + movie.poster_path,
-            contentDescription = null,
-            loading = placeholder(R.drawable.ic_ondemand_video_24),
-            modifier = Modifier.height(ITEM_IMAGE_HEIGHT.dp).width((ITEM_IMAGE_WIDTH).dp).background(Color.Black)
-        )
+        movie.poster_path?.let { path ->
+            GlideImage(
+                model = BuildConfig.IMAGE_URL + ITEM_IMAGE_HEIGHT + path,
+                contentDescription = null,
+                loading = placeholder(R.drawable.ic_ondemand_video_24),
+                requestBuilderTransform = { it.diskCacheStrategy(DiskCacheStrategy.ALL) },
+                modifier = Modifier.height(ITEM_IMAGE_HEIGHT.dp).width((ITEM_IMAGE_WIDTH).dp).background(Color.Black)
+            )
+        }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun MoviesPreview() {
-//    MoviesCatalogTheme {
-//        Surface(modifier = Modifier.fillMaxSize()) {
-//            MoviesScreenContent(popularMovies = listOf(), topRatedMovies = listOf(), topEarnerMovies = listOf())
-//        }
-//    }
-//}
