@@ -5,9 +5,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,6 +34,7 @@ import com.anil.moviescatalog.BuildConfig
 import com.anil.moviescatalog.R
 import com.anil.moviescatalog.model.Category
 import com.anil.moviescatalog.model.Movie
+import com.anil.moviescatalog.ui.RedLineSeperator
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
@@ -71,7 +72,6 @@ fun MoviesScreen(
         topRatedMovies,
         topEarnerMovies,
         modifier)
-
 }
 
 @Composable
@@ -85,18 +85,20 @@ fun MoviesScreenContent(
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
-            .background(MaterialTheme.colorScheme.secondary)
+            .fillMaxHeight()
+            .background(MaterialTheme.colorScheme.primary)
             .verticalScroll(rememberScrollState())
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_launcher_foreground),
+            painter = painterResource(id = R.drawable.ic_movie),
             contentDescription = null,
-            modifier = Modifier.size(50.dp).align(Alignment.CenterHorizontally)
+            modifier = Modifier.size(50.dp).align(Alignment.CenterHorizontally).padding(top = 16.dp)
         )
-        Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color.Red))
+        RedLineSeperator(3)
         MovieRow(popularMovies, Category.POPULAR, onClick)
         MovieRow(topRatedMovies, Category.TOP_RATED, onClick)
         MovieRow(topEarnerMovies, Category.REVENUE, onClick)
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
@@ -109,6 +111,7 @@ fun MovieRow(movies: LazyPagingItems<Movie>, category: Category, onClick: (Movie
     }
     Text(title,
         style = MaterialTheme.typography.headlineSmall,
+        color = MaterialTheme.colorScheme.onSecondary,
         modifier = Modifier.padding(8.dp)
     )
     LazyRow {
@@ -130,7 +133,7 @@ fun MovieItem(movie: Movie, onClick: ()->Unit) {
             GlideImage(
                 model = BuildConfig.IMAGE_URL + ITEM_IMAGE_HEIGHT + path,
                 contentDescription = null,
-                loading = placeholder(R.drawable.ic_ondemand_video_24),
+                loading = placeholder(R.drawable.ic_movie_24),
                 requestBuilderTransform = { it.diskCacheStrategy(DiskCacheStrategy.ALL) },
                 modifier = Modifier.height(ITEM_IMAGE_HEIGHT.dp).width((ITEM_IMAGE_WIDTH).dp).background(Color.Black)
             )

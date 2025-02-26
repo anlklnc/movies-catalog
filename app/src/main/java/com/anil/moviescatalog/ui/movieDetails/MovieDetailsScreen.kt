@@ -13,7 +13,9 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.anil.moviescatalog.BuildConfig
 import com.anil.moviescatalog.model.Movie
+import com.anil.moviescatalog.ui.RedLineSeperator
 import com.anil.moviescatalog.ui.theme.MoviesCatalogTheme
 import com.anil.moviescatalog.util.NumberUtil
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -42,7 +45,7 @@ fun MovieDetailsScreen (
     modifier: Modifier = Modifier,
     onNavigateToStreaming: () -> Unit
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier.background(MaterialTheme.colorScheme.secondary)) {
         Box(modifier = Modifier.fillMaxWidth().height(300.dp).background(Color.Black)) {
             GlideImage(
                 model = BuildConfig.IMAGE_URL + ITEM_IMAGE_HEIGHT + movie.poster_path,
@@ -80,11 +83,14 @@ fun MovieDetailsScreen (
                 )
             }
         }
-        Text(modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp).weight(1.0f),
-            text = movie.overview
+        RedLineSeperator()
+        Text(text = movie.overview,
+            color = MaterialTheme.colorScheme.onSecondary,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp).weight(1.0f)
         )
         Button(
             onClick = onNavigateToStreaming,
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
             modifier = Modifier.fillMaxWidth().padding(16.dp)
         ) {
             Icon(

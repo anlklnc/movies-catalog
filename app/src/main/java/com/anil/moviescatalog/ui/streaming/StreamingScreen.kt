@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -28,6 +29,7 @@ import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.anil.moviescatalog.model.Movie
+import com.anil.moviescatalog.ui.RedLineSeperator
 
 @Composable
 fun StreamingScreen (
@@ -63,16 +65,19 @@ fun StreamingScreen (
             ExoPlayerView(vm.exoPlayer, true)
         }
     } else {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.primary)) {
             ExoPlayerView(vm.exoPlayer)
+            RedLineSeperator()
             Text(
                 text = movie.title,
+                color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(16.dp)
             )
             Text(
                 text = movie.overview,
+                color = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(16.dp)
             )
         }
