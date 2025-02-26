@@ -1,5 +1,6 @@
 package com.anil.moviescatalog.ui.movies
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,9 +18,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,7 +38,8 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 const val ITEM_IMAGE_HEIGHT = 200
 const val ITEM_IMAGE_WIDTH = 134
@@ -48,6 +53,17 @@ fun MoviesScreen(
     val popularMovies = vm.popularMovies.collectAsLazyPagingItems()
     val topRatedMovies = vm.topRatedMovies.collectAsLazyPagingItems()
     val topEarnerMovies = vm.topEarnerMovies.collectAsLazyPagingItems()
+
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            vm.error.collectLatest { exception ->
+                Toast.makeText(context, "Network error!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     MoviesScreenContent(
         onNavigateToDetails,

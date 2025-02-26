@@ -12,6 +12,8 @@ import com.anil.moviescatalog.model.Category
 import com.anil.moviescatalog.model.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,6 +27,9 @@ class MoviesViewModel @Inject constructor(
     lateinit var popularMovies: Flow<PagingData<Movie>>
     lateinit var topRatedMovies: Flow<PagingData<Movie>>
     lateinit var topEarnerMovies: Flow<PagingData<Movie>>
+
+    private val _error = MutableSharedFlow<Exception>()
+    val error: SharedFlow<Exception> = _error
 
     init {
         getMovies()
@@ -40,6 +45,11 @@ class MoviesViewModel @Inject constructor(
 
     private fun createPagerFlow(category: Category): Flow<PagingData<Movie>> =
         Pager(PagingConfig(PAGE_SIZE)) {
-            MoviesPagingSource(repository, category)
+            MoviesPagingSource(repository, category) {
+                // Handle error
+                viewModelScope.launch {
+                    _error.emit(it)
+                }
+            }
         }.flow.cachedIn(viewModelScope)
 }
